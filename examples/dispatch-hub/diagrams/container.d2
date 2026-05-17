@@ -1,0 +1,116 @@
+title: dispatch-hub — Container View (per region) {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+ec: EC 기업 {
+  shape: person
+}
+rider: 라이더 (mobile) {
+  shape: person
+}
+
+kong: Kong Gateway {
+  shape: hexagon
+  style.fill: "#fef3c7"
+  description: API Gateway on EKS
+}
+
+ingest: ingest-api {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Go · REST/Webhook
+}
+
+kafka: MSK Kafka {
+  shape: queue
+  style.fill: "#fce7f3"
+  description: orders/dispatch/assignments/tracking/billing topics
+}
+
+domain_tx: Domain (tx-pg) {
+  shape: rectangle
+  style.fill: "#e0e7ff"
+  description: order-svc · dispatch-svc · assignment-svc\npricing-svc · billing-svc
+}
+
+domain_drv: Domain (driver-pg) {
+  shape: rectangle
+  style.fill: "#e0e7ff"
+  description: rider-svc · notification-svc
+}
+
+tracking: tracking-svc {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Go · gRPC stream
+}
+
+ml: routing-ml-svc {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Python + Triton (in-cluster)
+}
+
+tx_pg: tx-pg (Aurora) {
+  shape: cylinder
+  style.fill: "#dbeafe"
+  description: schemas: orders, dispatch,\nassignments, pricing, billing
+}
+driver_pg: driver-pg (Aurora) {
+  shape: cylinder
+  style.fill: "#dbeafe"
+  description: schemas: rider, notification
+}
+tracking_ddb: tracking-store (DynamoDB) {
+  shape: cylinder
+  style.fill: "#dbeafe"
+  description: TTL 90d
+}
+redis: feature-redis {
+  shape: cylinder
+  style.fill: "#fee2e2"
+  description: feature lookup, idempotency
+}
+
+archive: archive-sink {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Kafka Connect S3
+}
+s3_arch: S3 events (region-local) {
+  shape: cylinder
+  style.fill: "#dbeafe"
+}
+
+fcm: FCM/APNs {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+
+ec -> kong: REST/Webhook
+rider -> kong: gRPC (OIDC)
+kong -> ingest
+kong -> tracking
+kong -> domain_tx: read APIs
+
+ingest -> kafka: publish (orders.events)
+kafka -> domain_tx: consume
+kafka -> domain_drv: consume
+domain_tx -> kafka: domain events (dispatch/assignment/billing)
+domain_drv -> kafka: notification events
+
+domain_tx -> tx_pg
+domain_drv -> driver_pg
+domain_tx -> domain_drv: gRPC (rider lookup)
+
+domain_tx -> ml: gRPC (route score)
+ml -> redis: features
+
+tracking -> tracking_ddb: write 50K/s
+tracking -> kafka: tracking.events.v1 (meaningful only)
+
+kafka -> archive -> s3_arch
+domain_drv -> fcm: push (out of region OK)

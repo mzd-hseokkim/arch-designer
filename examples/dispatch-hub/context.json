@@ -1,0 +1,40 @@
+{
+  "project": "dispatch-hub",
+  "createdAt": "2026-05-17T00:00:00Z",
+  "targets": ["aws", "k8s"],
+  "primaryRegion": "ap-northeast-2",
+  "regions": ["ap-northeast-2", "ap-northeast-1"],
+  "nfr": {
+    "performance": {
+      "ingestPeakTps": 3000,
+      "trackingEventsPerSec": 50000,
+      "p99DashboardMs": 500,
+      "assignmentLatencyS": 5
+    },
+    "reliability": { "slaPercent": 99.95, "rpoMinutes": 1, "rtoMinutes": 15 },
+    "security": {
+      "compliance": ["K-ISMS", "APPI"],
+      "dataClassification": "PII+location",
+      "dataResidency": "per-country"
+    },
+    "portability": { "multiCloud": false, "vendorLockInTolerance": "medium" }
+  },
+  "scaleHints": {
+    "dailyOrders": 500000,
+    "concurrentRiders": 5000,
+    "growthHorizonMonths": 18
+  },
+  "constraints": [
+    "team-size: 35",
+    "company-standard: kubernetes",
+    "multi-region: KR+JP",
+    "data-residency: per-country",
+    "domains > datastores: consolidate by coupling"
+  ],
+  "decisions": [
+    { "id": "ADR-0001", "slug": "compute-eks", "status": "accepted" },
+    { "id": "ADR-0002", "slug": "event-backbone-msk", "status": "accepted" },
+    { "id": "ADR-0003", "slug": "datastore-consolidation", "status": "accepted" },
+    { "id": "ADR-0004", "slug": "multi-region-topology", "status": "accepted" }
+  ]
+}

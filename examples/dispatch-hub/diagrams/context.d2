@@ -1,0 +1,57 @@
+title: dispatch-hub — System Context {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+ec: EC 기업 {
+  shape: person
+}
+rider: 라이더 (mobile) {
+  shape: person
+}
+end_user: 엔드유저 (tracking) {
+  shape: person
+}
+mgr: 라이더 회사 관리자 {
+  shape: person
+}
+ops: 내부 운영자 {
+  shape: person
+}
+
+system: dispatch-hub {
+  shape: rectangle
+  style.fill: "#bfdbfe"
+  style.bold: true
+  description: B2B real-time last-mile dispatch SaaS (KR + JP)
+}
+
+pg: 외부 PG {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+fcm: FCM / APNs {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+sms: SMS Gateway (KR/JP) {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+maps: Map Provider {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+
+ec -> system: REST / Webhook (orders)
+rider -> system: gRPC (OIDC + device-bind)
+end_user -> system: HTTPS (signed URL, 24h)
+mgr -> system: HTTPS (web)
+ops -> system: admin (VPN)
+
+pg -> system: webhook
+system -> fcm: push (rider alerts)
+system -> sms: notifications
+system -> maps: routing / geocoding

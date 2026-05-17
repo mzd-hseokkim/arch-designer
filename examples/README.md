@@ -11,7 +11,8 @@ These exist to:
 
 | Example | Domain | Targets | Highlights |
 |---|---|---|---|
-| [`order-service/`](./order-service/) | Korean SMB multi-channel order management SaaS | AWS (primary) + on-prem (DR) | Aurora Serverless v2, ECS Fargate, SQS per-channel isolation, Cognito + MFA |
+| [`order-service/`](./order-service/) | Korean SMB multi-channel order management SaaS | AWS (primary) + on-prem (DR) | Aurora Serverless v2, ECS Fargate, SQS per-channel isolation, Cognito + MFA. Full pipeline incl. IaC. |
+| [`dispatch-hub/`](./dispatch-hub/) | B2B real-time last-mile dispatch (KR + JP) | AWS + K8s (EKS) | MSK Kafka, EKS + Karpenter, **4 datastores for 9 domains**, per-country active-active, in-cluster ML serving. Requirements → design → diagrams (IaC skipped). |
 
 ## How these were generated
 
