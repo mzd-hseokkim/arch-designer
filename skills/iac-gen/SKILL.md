@@ -100,6 +100,39 @@ After all files are written, invoke the `iac-reviewer` subagent on the generated
 
 All run as Docker containers (no host installs). Reviewer returns structured findings; this skill fixes mechanical issues (formatting, missing required args) automatically and surfaces design-level findings to the user.
 
+### 4b. Post-generation hygiene
+
+After validators run, the IaC tree contains transient artifacts (most notably `.terraform/` from `terraform init` — hundreds of MB of provider plugins + module clones). Leaving these in the user's working tree pollutes commits.
+
+Write a `.gitignore` at the **project root** (`.claude/arch-designer/<project>/.gitignore`) covering:
+
+```
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+# Backend config carries account-specific values
+**/backend.tf
+
+# Local secrets — never commit
+**/.env
+!**/.env.example
+
+# Helm
+**/charts/*.tgz
+
+# OS / editor
+.DS_Store
+Thumbs.db
+```
+
+If `.gitignore` already exists, **merge missing entries** rather than overwriting.
+
+Heads-up to surface in the final report (§5): the user's **outer** working directory (where they invoked Claude Code) may also pick up `.claude/settings.json` from Claude Code's session — that file is Claude Code's, not this plugin's, but the user likely wants it gitignored too. Recommend (don't auto-add) a single line `.claude/settings.local.json` in the outer repo's `.gitignore` if one exists.
+
 ### 5. Report
 Print:
 - Generated files (count per target)

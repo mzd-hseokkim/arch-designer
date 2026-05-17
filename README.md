@@ -1,7 +1,7 @@
 # arch-designer
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.1-orange.svg)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-0.1.2-orange.svg)](.claude-plugin/plugin.json)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-7c3aed.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
 
 자유 서술 형태의 기능/비기능 요구사항을 받아 **설계 문서 → 아키텍처 다이어그램 → Infrastructure-as-Code**까지 일관되게 만들어주는 Claude Code 플러그인.
@@ -213,7 +213,7 @@ arch-designer/
 
 ## Status
 
-v0.1.1 — 4 스킬 + 1 에이전트 + 2 시나리오 end-to-end 검증 완료 (LLM dry-run). 실 슬래시 명령 호출은 다음 마일스톤.
+v0.1.2 — 4 스킬 + 1 에이전트 + 2 시나리오 end-to-end 검증 완료. **실 슬래시 명령 호출도 검증 통과** (별도 빈 프로젝트에서 동일 시나리오 실행 → 산출물 구조 시뮬레이션과 일치, 일부 항목은 더 정확).
 
 ## License
 
