@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Claude Code plugin for AI-assisted software architecture design.",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "plugins": [
     {
       "name": "arch-designer",
       "source": ".",
       "description": "Free-form requirements → design doc (arc42-lite) + ADRs → architecture diagrams (D2 + diagrams.py) → IaC (Terraform / Helm / docker-compose).",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "category": "architecture",
       "tags": ["architecture", "design", "c4", "d2", "diagrams", "terraform", "kubernetes", "iac"]
     }
