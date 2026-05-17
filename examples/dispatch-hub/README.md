@@ -21,6 +21,18 @@ End-to-end artifacts (requirements → design + ADRs → diagrams) for a multi-r
 | 도메인↔DB | 1:1 적합 | **다대일** consolidation (사용자 요구) |
 | ML | 없음 | in-cluster Triton + SageMaker training |
 
+## Documents (human-readable)
+
+마크다운으로 작성된 산출물. GitHub에서 바로 렌더링됩니다.
+
+- 📋 [**requirements.md**](requirements.md) — ISO/IEC 25010 8축. multi-region/data-residency/도메인>스토어 제약 명시.
+- 📐 [**design.md**](design.md) — arc42-lite 7섹션. Building Block(9 도메인) + Datastore(4 스토어) + Runtime 시나리오 4개(주문 인입 / 트래킹 50K/s / 도메인 장애 / ML 라우팅) + 리전별·글로벌 배포 뷰.
+- 🧭 **Architecture Decision Records** (4개):
+  - [ADR-0001: Compute = Amazon EKS](docs/adr/0001-compute-eks.md)
+  - [ADR-0002: Event backbone = Amazon MSK](docs/adr/0002-event-backbone-msk.md)
+  - [ADR-0003: **9 도메인 → 4 데이터스토어 통합**](docs/adr/0003-datastore-consolidation.md)
+  - [ADR-0004: Per-country active-active + async global aggregation](docs/adr/0004-multi-region-topology.md)
+
 ## File tree
 
 ```
@@ -41,6 +53,9 @@ dispatch-hub/
 ```
 
 ## Diagrams
+
+> `.d2` / `.py`는 텍스트 **소스**이고 `.svg` / `.png`가 렌더링 결과 (아래에 임베드). 소스를 보려면 같은 폴더의 `context.d2` 등을 열면 됨. 직접 편집 후 재렌더링은 [d2lang.com 플레이그라운드](https://play.d2lang.com), [VS Code D2 확장](https://marketplace.visualstudio.com/items?itemName=terrastruct.d2), 또는 `docker run terrastruct/d2:latest`.
+
 
 ### System Context
 ![Context](diagrams/context.svg)

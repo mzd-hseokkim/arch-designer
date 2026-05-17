@@ -8,6 +8,20 @@ End-to-end artifacts for a Korean SMB multi-channel order management SaaS. Produ
 
 That single paragraph is the only input to `gather-reqs`. Everything below is derived.
 
+## Documents (human-readable)
+
+마크다운으로 작성된 산출물. GitHub에서 바로 렌더링됩니다.
+
+- 📋 [**requirements.md**](requirements.md) — 자유 서술 입력 → ISO/IEC 25010 8축으로 구조화된 요구사항. `stated` / `inferred` 태그로 명시값과 추정값 구분.
+- 📐 [**design.md**](design.md) — arc42-lite 7섹션 (Goals / Constraints / Solution Strategy / Building Blocks / Runtime / Deployment / Decisions). 배포 뷰는 AWS + 온프렘 각각.
+- 🧭 **Architecture Decision Records** (5개, Context / Decision / Consequences / Alternatives):
+  - [ADR-0001: Compute = ECS Fargate](docs/adr/0001-compute-ecs-fargate.md)
+  - [ADR-0002: Database = Aurora PG Serverless v2](docs/adr/0002-database-aurora-serverless-v2.md)
+  - [ADR-0003: Channel adapters = event-driven workers](docs/adr/0003-channel-adapters-event-driven.md)
+  - [ADR-0004: Authentication = Cognito](docs/adr/0004-auth-cognito.md)
+  - [ADR-0005: Topology = Multi-AZ, single region](docs/adr/0005-deployment-multi-az-single-region.md)
+- 🛠 **IaC + 리뷰 결과** — [`iac/aws/`](iac/aws/) (Terraform), [`iac/onprem/`](iac/onprem/) (docker-compose). 각 디렉토리의 README에 apply 절차와 의도된 제외사항이 적혀있음.
+
 ## File tree
 
 ```
@@ -32,6 +46,9 @@ order-service/
 ```
 
 ## Diagrams
+
+> `.d2` / `.py`는 텍스트 **소스**이고 `.svg` / `.png`가 렌더링 결과 (아래에 임베드). 소스를 보려면 같은 폴더의 `context.d2` 등을 열면 됨. 직접 편집 후 재렌더링은 [d2lang.com 플레이그라운드](https://play.d2lang.com), [VS Code D2 확장](https://marketplace.visualstudio.com/items?itemName=terrastruct.d2), 또는 `docker run terrastruct/d2:latest`.
+
 
 ### System Context (D2)
 ![Context](diagrams/context.svg)
