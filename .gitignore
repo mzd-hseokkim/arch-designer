@@ -16,8 +16,9 @@ override.tf.json
 **/.env
 !**/.env.example
 
-# Claude Code local settings (personal)
-.claude/settings.local.json
+# Claude Code working directory — never ship plugin-local dev settings
+# (their presence inside the plugin repo can confuse plugin installers).
+.claude/
 
 # OS / editor
 .DS_Store
