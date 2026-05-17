@@ -1,49 +1,45 @@
-# CLAUDE.md
+# arch-designer — plugin conventions
 
-Karpathy 가이드라인 기반 작업 원칙. 모든 작업에 우선 적용.
+이 repo에서 작업할 때 Claude가 따라야 할 규약. 일반 코딩 철학은 사용자 전역 CLAUDE.md에 있음 — 여기는 이 plugin 고유 룰만.
 
-## 1. 코딩 전에 생각하라
+## 1. Skill authoring
 
-- 가정은 명시한다. 불확실하면 묻는다.
-- 해석이 여러 갈래면 조용히 고르지 말고 제시한다.
-- 더 단순한 방법이 있으면 말한다. 필요시 반박한다.
-- 막히면 멈춘다. 무엇이 헷갈리는지 이름 붙이고 묻는다.
+- 새 skill = `skills/<name>/SKILL.md`. **본문은 instructions만**, 실행 코드/스크립트 금지.
+- frontmatter 필수 필드: `name`, `description`, `user-invocable`, `argument-hint`, `allowed-tools`.
+- skill 간 상태 전달 통로는 **단일 파일**: `.claude/arch-designer/<project>/context.json`. 다른 경로/포맷으로 우회 금지.
+- `argument-hint`는 사용자가 입력할 인자만, 내부 옵션은 SKILL.md 본문에서 처리.
 
-## 2. 단순함 우선
+## 2. Decision tracing
 
-문제를 푸는 최소 코드. 투기적 코드 금지.
+- 모든 부수 결정은 design.md prose에 흡수. ADR은 **핵심 결정 ~5개만**.
+- IaC의 모든 `resource` / `module` 블록에 `ADR-NNNN: <reason>` 한 줄 주석 — ADR 없으면 prose 결정 인용.
+- ADR Alternatives 표는 "industry standard"/"best practice" 핑계 금지. **숫자, NFR 인용, 구체 근거**만.
+- ADR 번호는 sequential, 4자리, 절대 재사용 금지. status 변경 시 새 ADR로 supersede.
 
-- 요청 범위 밖 기능 추가 금지.
-- 일회성 코드에 추상화 금지.
-- 요청 없는 "유연성"/"설정 가능성" 금지.
-- 일어날 수 없는 시나리오에 에러 처리 금지.
-- 200줄을 50줄로 줄일 수 있으면 다시 쓴다.
+## 3. Host dependencies
 
-판단 기준: "시니어 엔지니어가 과설계라고 할까?" → 그렇다면 단순화.
+- **Docker만** 호스트 의존. Java/Python/Go/Terraform CLI는 컨테이너로 캡슐화.
+- 새 도구 추가 시:
+  - 해당 SKILL.md "Dependencies" 섹션 갱신
+  - 루트 README.md "Dependencies" 표 갱신
+  - 가능하면 이미지 태그 핀 (예: `hashicorp/terraform:1.9`, `terrastruct/d2:latest`는 latest 허용)
 
-## 3. 외과적 변경
+## 4. Examples maintenance
 
-기존 코드 수정 시:
-- 인접 코드/주석/포맷 "개선" 금지.
-- 멀쩡한 것 리팩터 금지.
-- 기존 스타일에 맞춘다.
-- 무관한 dead code는 언급만, 삭제는 요청받고.
+- SKILL.md 구조 변경 시 `examples/order-service/`도 함께 갱신해 회귀 가시화.
+- 시나리오 추가 시 `examples/README.md` 표에 한 줄.
+- examples 산출물은 **시뮬레이션 결과**임을 README에 명시 — 실제 slash command 결과와 구분.
 
-본인 변경으로 생긴 고아(unused import/var/fn)는 정리. 기존 dead code는 손대지 않음.
+## 5. Anti-patterns
 
-테스트: 변경된 모든 라인이 사용자 요청에 직접 연결되는가?
+- skill 본문에서 `bash`/`python` 실행 로직 작성 금지 — SKILL.md는 명세, 실행은 Claude가 도구 호출로.
+- ADR 없는 상태에서 iac-gen 단계 진행 금지 (skill flow가 강제).
+- `.claude/arch-designer/<project>/` 밖에 파이프라인 산출물 쓰지 않음.
+- plugin.json `version` 무시 금지 — 사용자 facing 변경 시 항상 bump.
 
-## 4. 목표 기반 실행
+## 6. Validation gate
 
-검증 가능한 성공 기준을 먼저 정의:
-- "검증 추가" → "유효하지 않은 입력에 대한 테스트 작성 후 통과시키기"
-- "버그 수정" → "버그 재현 테스트 작성 후 통과시키기"
-- "리팩터 X" → "전/후 테스트 통과 확인"
-
-다중 스텝 작업은 간단한 계획 명시:
-```
-1. [스텝] → 검증: [체크]
-2. [스텝] → 검증: [체크]
-```
-
-강한 성공 기준 = 독립적으로 루프 가능. 약한 기준("동작하게") = 계속 되묻게 됨.
+PR/커밋 전 최소 점검:
+- 변경한 skill을 `examples/order-service/`에 적용했을 때 산출물이 합리적인지 mental check.
+- README badges의 version과 plugin.json `version`이 일치하는지.
+- 새로 추가한 Docker 이미지가 Linux/amd64에서 동작하는지 (Windows 호스트에서 `docker run --platform linux/amd64` 강제 가능).
