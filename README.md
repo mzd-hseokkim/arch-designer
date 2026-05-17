@@ -1,5 +1,9 @@
 # arch-designer
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](.claude-plugin/plugin.json)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-7c3aed.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
+
 Claude Code plugin that takes free-form Functional/Non-Functional Requirements and produces a design document, architecture diagrams (D2), and Infrastructure-as-Code (Terraform / Kubernetes / docker-compose).
 
 ## Pipeline

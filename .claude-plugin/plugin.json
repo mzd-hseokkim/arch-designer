@@ -15,5 +15,6 @@
     "terraform",
     "kubernetes",
     "iac"
-  ]
+  ],
+  "license": "MIT"
 }
