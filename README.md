@@ -16,23 +16,44 @@ All artifacts land in `.claude/arch-designer/<project>/` in the current working 
 
 ## Status
 
-Scaffolding + behavioural spec (SKILL.md per skill + iac-reviewer agent). Validated end-to-end against one scenario — see [`examples/order-service/`](./examples/order-service/) for the actual artifacts the pipeline produces (design doc, ADRs, diagrams, Terraform/compose, reviewer findings).
+v0.1.0 — Scaffolding + behavioural spec (SKILL.md per skill + iac-reviewer agent). Validated end-to-end against one scenario — see [`examples/order-service/`](./examples/order-service/) for the actual artifacts the pipeline produces (design doc, ADRs, diagrams, Terraform/compose, reviewer findings).
 
-Real slash-command install + invocation is the next milestone.
+Next milestone: real slash-command install + invocation on a fresh project; multi-scenario validation.
 
-## Local install (development)
+## Install
 
-Add to `~/.claude/settings.json`:
+### From GitHub (recommended)
 
+In Claude Code:
+```
+/plugin marketplace add mzd-hseokkim/arch-designer
+/plugin install arch-designer@arch-designer-marketplace
+```
+
+Or wire it in `~/.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "local-arch-designer": {
-      "source": { "source": "directory", "path": "C:/WORK/workspace/arch-designer" }
+    "arch-designer": {
+      "source": { "source": "github", "repo": "mzd-hseokkim/arch-designer" }
     }
   }
 }
 ```
+
+### Local checkout (development)
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "arch-designer-local": {
+      "source": { "source": "directory", "path": "C:/path/to/arch-designer" }
+    }
+  }
+}
+```
+
+Restart Claude Code after editing settings.
 
 ## Dependencies
 
