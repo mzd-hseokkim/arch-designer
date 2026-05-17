@@ -50,5 +50,24 @@ docker run --rm -v "$PWD:/work" -w /work gtramontina/diagrams:0.23.4 \
 - diagrams.py: `direction="LR"`, `Cluster` per logical zone, `Edge(style="dashed")` for async flows.
 - Custom in-house components → `diagrams.custom.Custom` with PNG asset under `assets/`.
 
+## diagrams.py import gotchas (v0.23.x)
+
+LLM-friendly cheatsheet — first-render failures are usually from these. Verify with `python -c "from diagrams.<path> import <Class>"` before authoring if unsure.
+
+| Symbol | Correct import path | Common wrong guess |
+|---|---|---|
+| `SQS` | `diagrams.aws.integration import SQS` | `SimpleQueueService` (doesn't exist as alias) |
+| `MSK` (Kafka) | `diagrams.aws.analytics import ManagedStreamingForKafka as MSK` | `diagrams.aws.integration` |
+| `Cognito` | `diagrams.aws.security import Cognito` | `diagrams.aws.identity` |
+| `HPA` | `diagrams.k8s.clusterconfig import HPA` | `diagrams.k8s.others` |
+| `Limits`, `Quota` | `diagrams.k8s.clusterconfig` | same |
+| `Argocd` | `diagrams.onprem.gitops import Argocd` | `diagrams.onprem.cd` |
+| `Istio` | `diagrams.onprem.network import Istio` | `diagrams.onprem.servicemesh` (non-existent) |
+| `Keycloak`, `Dex` | `diagrams.onprem.identity` | `auth` |
+| `Ceph`, `Minio` | `diagrams.onprem.storage` | `inmemory` |
+| `Sagemaker` | `diagrams.aws.ml import Sagemaker` | `diagrams.aws.analytics` |
+
+If an import fails at render time, the **first** fix is to check this table, then `ls /usr/local/lib/python3.11/site-packages/diagrams/<provider>/` inside the image. Do not invent submodule paths.
+
 ## Next
 `/arch-designer:iac-gen <project>`

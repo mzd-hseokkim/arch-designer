@@ -44,6 +44,18 @@ Drop irrelevant rows. Add domain-specific rows when FRs warrant (e.g., search en
 
 Cap ADRs at **~7**. If more come up, fold the smaller ones into design.md prose.
 
+**Forced ADR candidates from constraints**: scan `context.json.constraints` for any item that names a *structural* property of the system (not a budget number, team size, or familiarity). Each one is an ADR candidate — the constraint goes verbatim in the ADR's Context, and Alternatives must explain why the constraint forbids them. Examples that should always become an ADR:
+
+| Constraint shape | Why it forces an ADR |
+|---|---|
+| "domains > datastores: consolidate by coupling" | Datastore topology decision; alternatives differ |
+| "company-standard: kubernetes" | Compute model decision is settled but its consequences (operator burden, mesh choice) need recording |
+| "multi-region: KR+JP" | Topology decision with data-sovereignty and cost implications |
+| "data-residency: per-country" | Replication and analytics-aggregation strategy |
+| "channel-adapters: pluggable" | Modular extensibility pattern |
+
+Constraints that are *values* ("budget < $3K", "team-size: 4") inform decisions but rarely warrant their own ADR — they appear as Context citations in other ADRs.
+
 ### 3. Write ADRs first, design.md second
 
 Each ADR is independent and gets reused. design.md references them by number.
