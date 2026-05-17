@@ -1,0 +1,34 @@
+{
+  "project": "order-service",
+  "createdAt": "2026-05-17T00:00:00Z",
+  "targets": ["aws", "onprem"],
+  "primaryRegion": "ap-northeast-2",
+  "nfr": {
+    "performance": { "peakTps": 200, "p99LatencyMs": 300 },
+    "reliability": { "slaPercent": 99.9, "rpoMinutes": 5, "rtoMinutes": 30 },
+    "security": {
+      "compliance": ["K-ISMS"],
+      "dataClassification": "PII",
+      "dataResidency": "KR"
+    },
+    "portability": { "multiCloud": false, "vendorLockInTolerance": "medium" }
+  },
+  "scaleHints": {
+    "users": "10K DAU",
+    "dailyOrders": 50000,
+    "growthHorizonMonths": 12
+  },
+  "constraints": [
+    "budget: under $3000/mo",
+    "team-size: 4",
+    "team-stack-familiarity: AWS",
+    "channel-adapters: pluggable"
+  ],
+  "decisions": [
+    { "id": "ADR-0001", "slug": "compute-ecs-fargate", "status": "accepted" },
+    { "id": "ADR-0002", "slug": "database-aurora-serverless-v2", "status": "accepted" },
+    { "id": "ADR-0003", "slug": "channel-adapters-event-driven", "status": "accepted" },
+    { "id": "ADR-0004", "slug": "auth-cognito", "status": "accepted" },
+    { "id": "ADR-0005", "slug": "deployment-multi-az-single-region", "status": "accepted" }
+  ]
+}

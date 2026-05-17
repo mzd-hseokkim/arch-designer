@@ -1,0 +1,36 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# Backend config carries account-specific values; ship only the template
+**/backend.tf
+
+# Compose / env
+**/.env
+!**/.env.example
+
+# Claude Code local settings (personal)
+.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Generated diagram intermediates (we ship rendered SVG/PNG in examples/)
+# nothing to ignore — keep both source and rendered
+
+# Python (in case diagrams.py is run locally outside Docker)
+__pycache__/
+*.pyc
+.venv/
+venv/

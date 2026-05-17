@@ -1,0 +1,131 @@
+title: Order Service — Container View {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+seller: Seller {
+  shape: person
+}
+
+cf: CloudFront + S3 {
+  shape: rectangle
+  style.fill: "#dbeafe"
+  description: React SPA (web-app)
+}
+
+cognito: Cognito User Pool {
+  shape: hexagon
+  style.fill: "#fef3c7"
+  description: MFA, RBAC
+}
+
+api: api-gateway-svc {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Spring Boot · Fargate
+}
+
+naver_ad: naver-adapter {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Python · Fargate · poll
+}
+coupang_ad: coupang-adapter {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Python · Fargate · poll
+}
+ownsite_ad: ownsite-adapter {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Python · Fargate · webhook
+}
+
+q_naver: sqs-naver {
+  shape: queue
+  style.fill: "#fce7f3"
+}
+q_coupang: sqs-coupang {
+  shape: queue
+  style.fill: "#fce7f3"
+}
+q_ownsite: sqs-ownsite {
+  shape: queue
+  style.fill: "#fce7f3"
+}
+dlq: sqs-dlq {
+  shape: queue
+  style.fill: "#fee2e2"
+}
+
+ingest: order-ingest {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Spring Boot · Fargate · consumer
+}
+notif: notification-worker {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Python · Fargate
+}
+
+redis: ElastiCache Redis {
+  shape: cylinder
+  style.fill: "#fee2e2"
+  description: sessions, polling cursors, aggregates
+}
+db: Aurora PG Serverless v2 {
+  shape: cylinder
+  style.fill: "#e0e7ff"
+  description: writer + reader (Multi-AZ)
+}
+s3: S3 (KMS) {
+  shape: cylinder
+  style.fill: "#e0e7ff"
+  description: CSV/Excel exports
+}
+
+ext_naver: 네이버 스마트스토어 {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+ext_coupang: 쿠팡 WING {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+ext_own: 자사몰 {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+fcm: FCM {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+
+seller -> cf: HTTPS
+cf -> api: REST /api
+api -> cognito: verify JWT
+api -> redis: read aggregates
+api -> db: read/write (cache miss)
+api -> s3: export upload
+
+naver_ad -> ext_naver: poll
+coupang_ad -> ext_coupang: poll
+ext_own -> ownsite_ad: webhook
+
+naver_ad -> q_naver
+coupang_ad -> q_coupang
+ownsite_ad -> q_ownsite
+
+q_naver -> ingest
+q_coupang -> ingest
+q_ownsite -> ingest
+
+ingest -> db: INSERT
+ingest -> notif: OrderCreated (event)
+
+ingest -> dlq: poison msgs
+notif -> fcm: push
+fcm -> seller: notification

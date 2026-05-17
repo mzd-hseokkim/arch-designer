@@ -1,0 +1,72 @@
+title: Order Service — Container View {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+user: Customer {
+  shape: person
+}
+
+webapp: Web App {
+  shape: rectangle
+  style.fill: "#dbeafe"
+  description: React SPA
+}
+
+api: API Gateway {
+  shape: hexagon
+  style.fill: "#fef3c7"
+}
+
+auth: Auth Service {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Go · JWT
+}
+
+order: Order Service {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Java Spring Boot
+}
+
+cache: Redis {
+  shape: cylinder
+  style.fill: "#fee2e2"
+}
+
+db: PostgreSQL {
+  shape: cylinder
+  style.fill: "#e0e7ff"
+  description: Primary + Read Replica
+}
+
+queue: Kafka {
+  shape: queue
+  style.fill: "#fce7f3"
+}
+
+s3: Object Storage {
+  shape: cylinder
+  style.fill: "#e0e7ff"
+  description: S3 / MinIO
+}
+
+notif: Notification Worker {
+  shape: rectangle
+  style.fill: "#dcfce7"
+  description: Python
+}
+
+user -> webapp: HTTPS
+webapp -> api: REST / JSON
+api -> auth: verify token
+api -> order: forward request
+order -> cache: read/write session
+order -> db: persist
+order -> queue: publish OrderCreated
+order -> s3: upload invoice
+queue -> notif: consume
+notif -> user: email / push

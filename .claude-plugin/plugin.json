@@ -1,0 +1,19 @@
+{
+  "name": "arch-designer",
+  "version": "0.1.0",
+  "description": "Guide users from free-form requirements through design doc, architecture diagrams (D2 logical + diagrams.py deployment), and IaC (Terraform/K8s/compose).",
+  "author": {
+    "name": "hseokkim",
+    "email": "hseokkim@mz.co.kr"
+  },
+  "keywords": [
+    "architecture",
+    "design",
+    "d2",
+    "diagrams",
+    "c4",
+    "terraform",
+    "kubernetes",
+    "iac"
+  ]
+}

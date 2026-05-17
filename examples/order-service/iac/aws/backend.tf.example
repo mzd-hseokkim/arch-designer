@@ -1,0 +1,10 @@
+# Copy to backend.tf and fill in. Bucket and table must be pre-created.
+# terraform {
+#   backend "s3" {
+#     bucket         = "EXAMPLE-tfstate-order-service"
+#     key            = "order-service/dev/terraform.tfstate"
+#     region         = "ap-northeast-2"
+#     dynamodb_table = "EXAMPLE-tfstate-locks"
+#     encrypt        = true
+#   }
+# }

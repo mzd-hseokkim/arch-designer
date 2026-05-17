@@ -1,0 +1,50 @@
+title: Order Service — System Context {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+seller: Seller {
+  shape: person
+}
+employee: Seller Employee {
+  shape: person
+}
+
+system: Order Service {
+  shape: rectangle
+  style.fill: "#bfdbfe"
+  style.bold: true
+  description: Multi-channel order management SaaS
+}
+
+naver: 네이버 스마트스토어 {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+coupang: 쿠팡 WING {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+ownsite: 자사몰 {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+pg: 외부 PG {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+fcm: FCM {
+  shape: cloud
+  style.fill: "#f3f4f6"
+}
+
+seller -> system: HTTPS (web/mobile)
+employee -> system: HTTPS (web)
+
+system -> naver: poll orders (API)
+system -> coupang: poll orders (API)
+ownsite -> system: webhook (new order)
+pg -> system: webhook (payment result)
+system -> fcm: push (new order alert)
